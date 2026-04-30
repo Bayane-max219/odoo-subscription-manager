@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="mail_template_renewal_reminder" model="mail.template">
+        <field name="name">Subscription: Renewal Reminder</field>
+        <field name="model_id" ref="model_subscription_subscription"/>
+        <field name="subject">Your subscription {{ object.name }} is expiring soon</field>
+        <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.partner_id.email_formatted }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #875A7B;">Subscription Renewal Reminder</h2>
+    <p>Dear {{ object.partner_id.name }},</p>
+    <p>Your subscription <strong>{{ object.name }}</strong> is expiring on
+       <strong>{{ object.date_end }}</strong>.</p>
+    <p>To avoid any interruption of service, please contact us to renew your subscription.</p>
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <tr style="background: #f5f5f5;">
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Subscription</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.name }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Plan</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.template_id.name }}</td>
+        </tr>
+        <tr style="background: #f5f5f5;">
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Expiry Date</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">{{ object.date_end }}</td>
+        </tr>
+        <tr>
+            <td style="padding: 10px; border: 1px solid #ddd;"><strong>Recurring Amount</strong></td>
+            <td style="padding: 10px; border: 1px solid #ddd;">
+                {{ object.recurring_total }} {{ object.currency_id.name }}
+            </td>
+        </tr>
+    </table>
+    <p>Best regards,<br/>{{ object.user_id.name }}</p>
+</div>
+        ]]></field>
+        <field name="auto_delete">True</field>
+    </record>
+
+    <record id="mail_template_subscription_closed" model="mail.template">
+        <field name="name">Subscription: Closed Confirmation</field>
+        <field name="model_id" ref="model_subscription_subscription"/>
+        <field name="subject">Your subscription {{ object.name }} has been closed</field>
+        <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+        <field name="email_to">{{ object.partner_id.email_formatted }}</field>
+        <field name="body_html"><![CDATA[
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <h2 style="color: #875A7B;">Subscription Closed</h2>
+    <p>Dear {{ object.partner_id.name }},</p>
+    <p>We confirm that your subscription <strong>{{ object.name }}</strong>
+       has been closed on {{ object.close_date }}.</p>
+    <p>We hope to work with you again in the future. Please don't hesitate
+       to reach out if you have any questions.</p>
+    <p>Best regards,<br/>{{ object.user_id.name }}</p>
+</div>
+        ]]></field>
+        <field name="auto_delete">True</field>
+    </record>
+</odoo>

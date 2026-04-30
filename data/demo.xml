@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Demo Subscription Templates -->
+    <record id="demo_template_monthly_saas" model="subscription.template">
+        <field name="name">SaaS Starter — Monthly</field>
+        <field name="billing_cycle">monthly</field>
+        <field name="duration_months">12</field>
+        <field name="auto_renew">True</field>
+        <field name="renewal_lead_days">15</field>
+        <field name="invoice_policy">advance</field>
+    </record>
+
+    <record id="demo_template_annual_enterprise" model="subscription.template">
+        <field name="name">Enterprise — Annual</field>
+        <field name="billing_cycle">annual</field>
+        <field name="duration_months">12</field>
+        <field name="auto_renew">True</field>
+        <field name="renewal_lead_days">30</field>
+        <field name="invoice_policy">advance</field>
+    </record>
+
+    <record id="demo_template_quarterly_pro" model="subscription.template">
+        <field name="name">Professional — Quarterly</field>
+        <field name="billing_cycle">quarterly</field>
+        <field name="duration_months">12</field>
+        <field name="auto_renew">True</field>
+        <field name="renewal_lead_days">15</field>
+        <field name="invoice_policy">advance</field>
+    </record>
+</odoo>

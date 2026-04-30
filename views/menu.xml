@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <menuitem id="menu_subscription_root" name="Subscriptions" sequence="50"
+              web_icon="odoo_subscription_manager,static/description/icon.png"/>
+
+    <menuitem id="menu_subscription_subscriptions" name="Subscriptions"
+              parent="menu_subscription_root" sequence="10"
+              action="action_subscriptions"/>
+
+    <menuitem id="menu_subscription_my" name="My Subscriptions"
+              parent="menu_subscription_root" sequence="20"
+              action="action_my_subscriptions"/>
+
+    <menuitem id="menu_subscription_config" name="Configuration"
+              parent="menu_subscription_root" sequence="100"/>
+
+    <menuitem id="menu_subscription_templates" name="Templates"
+              parent="menu_subscription_config" sequence="10"
+              action="action_subscription_templates"/>
+
+    <menuitem id="menu_subscription_stages" name="Stages"
+              parent="menu_subscription_config" sequence="20"
+              action="action_subscription_stages"
+              groups="base.group_system"/>
+</odoo>

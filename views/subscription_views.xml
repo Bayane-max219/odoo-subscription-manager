@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- FORM VIEW -->
+    <record id="view_subscription_form" model="ir.ui.view">
+        <field name="name">subscription.subscription.form</field>
+        <field name="model">subscription.subscription</field>
+        <field name="arch" type="xml">
+            <form string="Subscription">
+                <header>
+                    <button name="action_start" string="Start" type="object"
+                            class="oe_highlight"
+                            invisible="stage_id.category != 'draft'"/>
+                    <button name="action_renew" string="Renew" type="object"
+                            invisible="stage_id.category != 'in_progress'"/>
+                    <button name="action_close" string="Close" type="object"
+                            invisible="stage_id.category in ('cancelled', 'closed')"/>
+                    <field name="stage_id" widget="statusbar"
+                           statusbar_visible="stage_draft,stage_active,stage_closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="invoice_count"/>
+                                </span>
+                                <span class="o_stat_text">Invoices</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="template_id"/>
+                            <field name="partner_id"/>
+                            <field name="user_id"/>
+                            <field name="pricelist_id" groups="product.group_sale_pricelist"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="next_invoice_date"/>
+                            <field name="next_renewal_date"/>
+                            <field name="billing_cycle"/>
+                            <field name="recurring_total" widget="monetary"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Subscription Lines" name="lines">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id" groups="uom.group_uom"/>
+                                    <field name="price_unit"/>
+                                    <field name="discount" optional="show"
+                                           groups="product.group_discount_per_so_line"/>
+                                    <field name="tax_ids" widget="many2many_tags"/>
+                                    <field name="price_subtotal"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Settings" name="settings">
+                            <group>
+                                <field name="auto_renew"/>
+                                <field name="renewal_lead_days"
+                                       invisible="not auto_renew"/>
+                                <field name="invoice_policy"/>
+                                <field name="tag_ids" widget="many2many_tags"/>
+                            </group>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="note" placeholder="Internal notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- LIST VIEW -->
+    <record id="view_subscription_list" model="ir.ui.view">
+        <field name="name">subscription.subscription.list</field>
+        <field name="model">subscription.subscription</field>
+        <field name="arch" type="xml">
+            <tree string="Subscriptions" multi_edit="1">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="template_id"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="next_invoice_date"/>
+                <field name="recurring_total" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="stage_id" widget="badge"
+                       decoration-success="stage_id.category == 'in_progress'"
+                       decoration-info="stage_id.category == 'draft'"
+                       decoration-muted="stage_id.category in ('cancelled', 'closed')"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- KANBAN VIEW -->
+    <record id="view_subscription_kanban" model="ir.ui.view">
+        <field name="name">subscription.subscription.kanban</field>
+        <field name="model">subscription.subscription</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" group_create="0"
+                    class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="recurring_total"/>
+                <field name="currency_id"/>
+                <field name="date_end"/>
+                <field name="kanban_state"/>
+                <field name="stage_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                                <div class="o_kanban_record_subtitle">
+                                    <field name="partner_id"/>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <span class="fw-bold text-primary">
+                                            <field name="recurring_total" widget="monetary"/>
+                                        </span>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="kanban_state" widget="state_selection"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_subscription_search" model="ir.ui.view">
+        <field name="name">subscription.subscription.search</field>
+        <field name="model">subscription.subscription</field>
+        <field name="arch" type="xml">
+            <search string="Subscriptions">
+                <field name="name" string="Reference"/>
+                <field name="partner_id"/>
+                <field name="template_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter name="my_subscriptions" string="My Subscriptions"
+                        domain="[('user_id', '=', uid)]"/>
+                <filter name="active" string="Active"
+                        domain="[('stage_id.category', '=', 'in_progress')]"/>
+                <filter name="expiring_soon" string="Expiring in 30 Days"
+                        domain="[('date_end', '!=', False),
+                                 ('date_end', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_partner" string="Customer"
+                            context="{'group_by': 'partner_id'}"/>
+                    <filter name="group_template" string="Template"
+                            context="{'group_by': 'template_id'}"/>
+                    <filter name="group_stage" string="Stage"
+                            context="{'group_by': 'stage_id'}"/>
+                    <filter name="group_user" string="Salesperson"
+                            context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTIONS -->
+    <record id="action_subscriptions" model="ir.actions.act_window">
+        <field name="name">Subscriptions</field>
+        <field name="res_model">subscription.subscription</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_subscription_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first subscription!
+            </p>
+            <p>Manage recurring subscriptions with automated billing and renewals.</p>
+        </field>
+    </record>
+
+    <record id="action_my_subscriptions" model="ir.actions.act_window">
+        <field name="name">My Subscriptions</field>
+        <field name="res_model">subscription.subscription</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('user_id', '=', uid)]</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

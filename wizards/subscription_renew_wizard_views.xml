@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_subscription_renew_wizard" model="ir.ui.view">
+        <field name="name">subscription.renew.wizard.form</field>
+        <field name="model">subscription.renew.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Renew Subscriptions">
+                <group>
+                    <field name="subscription_ids" widget="many2many_tags" readonly="1"/>
+                    <field name="new_date_end"/>
+                    <field name="create_invoice"/>
+                    <field name="note" placeholder="Optional renewal note..."/>
+                </group>
+                <footer>
+                    <button name="action_renew" string="Renew" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_subscription_manager,subscription.subscription manager,model_subscription_subscription,base.group_user,1,1,1,1
+access_subscription_template_manager,subscription.template manager,model_subscription_template,base.group_user,1,1,1,0
+access_subscription_template_admin,subscription.template admin,model_subscription_template,base.group_system,1,1,1,1
+access_subscription_stage_manager,subscription.stage manager,model_subscription_stage,base.group_user,1,0,0,0
+access_subscription_stage_admin,subscription.stage admin,model_subscription_stage,base.group_system,1,1,1,1
+access_subscription_line_manager,subscription.line manager,model_subscription_line,base.group_user,1,1,1,1
+access_subscription_tag,subscription.tag,model_subscription_tag,base.group_user,1,1,1,0
+access_renew_wizard,subscription.renew.wizard,model_subscription_renew_wizard,base.group_user,1,1,1,1
+access_close_wizard,subscription.close.wizard,model_subscription_close_wizard,base.group_user,1,1,1,1
